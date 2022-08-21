@@ -8,7 +8,11 @@ using std::cout;
 using std::endl;
 using std::isalpha;
 
-class Employee {
+class AbstractEmployee {
+    virtual void AskForPromotion() = 0;
+};
+
+class Employee : AbstractEmployee {
 private:
     string Name;
     string Company;
@@ -74,6 +78,55 @@ public:
         cout << "Company: " << Company << endl;
         cout << "Age: " << Age << endl;
     }
+
+    void AskForPromotion() {
+        if (Age > 30) {
+            cout << Name << " has been promoted." << endl;
+        }
+        else {
+            cout << Name << " is too young for a promotion." << endl;
+        }
+    }
+
+    virtual void Work() {
+        cout << Name << " is checking emails, task backlogs, and performs those tasks." << endl;
+    }
+};
+
+class Developer : public Employee {
+public:
+    string FavouriteProgrammingLanguage;
+
+    Developer(string name, string company, int age, string favouriteProgrammingLanguage)
+        : Employee(name, company, age) {
+        FavouriteProgrammingLanguage = favouriteProgrammingLanguage;
+    }
+
+    void FixBug() {
+        cout << getName() << " fixes bugs using " << FavouriteProgrammingLanguage << "." << endl;
+    }
+
+    void Work() {
+        cout << getName() << " writes code in " << FavouriteProgrammingLanguage << endl;
+    }
+};
+
+class Teacher : public Employee {
+public:
+    string Subject;
+
+    Teacher(string name, string company, int age, string subject)
+        : Employee(name, company, age) {
+        Subject = subject;
+    }
+
+    void PrepareLesson() {
+        cout << getName() << " is preparing a lesson for " << Subject << "." << endl;
+    }
+
+    void Work() {
+        cout << getName() << " teaches " << Subject << " class." << endl;
+    }
 };
 
 int main()
@@ -82,13 +135,36 @@ int main()
     /*emp1.Name = "Shahnawaz Alam";
     emp1.Company = "ABC";
     emp1.Age = 34;*/
+    Employee emp2 = Employee("James Cook", "ABC", 22);
 
     emp1.IntroduceYourself();
-
     emp1.setAge(12);
     emp1.setName("code-forces");
     emp1.setAge(30);
     cout << emp1.getName() << " is " << emp1.getAge() << " years old." << endl;
+
+    emp2.IntroduceYourself();
+    emp2.Work();
+    emp2.AskForPromotion();
+
+    Developer dev = Developer("Saldina", "ABC", 28, "C++");
+    dev.IntroduceYourself();
+    dev.FixBug();
+    dev.Work();
+    dev.AskForPromotion();
+
+    Teacher teacher = Teacher("James Maddison", "ABC", 28, "Maths");
+    teacher.IntroduceYourself();
+    teacher.PrepareLesson();
+    teacher.Work();
+    teacher.AskForPromotion();
+
+    Employee* e1 = &dev;
+    Employee* e2 = &teacher;
+
+    cout << "************************************************************" << endl;
+    e1->Work();
+    e2->Work();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
